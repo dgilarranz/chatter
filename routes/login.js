@@ -14,7 +14,7 @@ router.post('/', function(req, res, next) {
   let password = req.body.password;
 
   // Comprobamos si las credenciales proporcionadas son correctas
-  if (bcrypt.compare(password, users[username].hash)) {
+  if (users[username] && bcrypt.compare(password, users[username].hash)) {
     // Si todo está correcto, creamos una sesión para el usuario y le redirigimos a chat
     req.session.user = users[username];
     res.redirect('/chat');
@@ -31,7 +31,7 @@ let users = {
 
 // hasheamos la contraseña de los usuarios
 bcrypt.hash("1234", 10, function(err, hash) {
-  users[david].hash = hash;
+  users.david.hash = hash;
 });
 
 module.exports = router;

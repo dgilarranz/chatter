@@ -10,7 +10,7 @@
       <div class="w-50 p-5 rounded" style="background-color: white;">
         <h1><%= title %></h1>
         <hr>
-        <form id="login" method="post" action="/login">
+        <form id="login" method="post" action="/login" class="mb-5">
           <div class="mb-3 row">
             <label class="col-3 col-form-label" for="username">Username</label>
             <div class="col-7">
@@ -25,6 +25,10 @@
           </div>
           <button class="btn btn-primary" type="submit">Login</button>
         </form>
+        <!-- Si hay un error, se muestra el mensaje -->
+        <% if (error) { %>
+          <div class="alert alert-danger w-100" role="alert"><%= error %></alert>
+        <% } %>
       </div>
     </div>
   </body>
