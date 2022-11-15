@@ -4,12 +4,23 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const session = require('express-session')
+const http = require('http');
+const {Server} = require('socket.io');
 
 const indexRouter = require('./routes/index');
 const loginRouter = require('./routes/login');
 const chatRouter = require('./routes/chat');
 
 const app = express();
+const server = http.createServer(app);
+const io = new Server(server);
+io.on("connection", (socket) => {
+  // Acciones a realizar cuando se recibe un evento por chat
+  socket.on("chat", (msg) => {
+    // Reenviamos el mensaje a todos los usuarios conectados
+    io.emit("chat", msg);
+  });
+});
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -37,6 +48,7 @@ app.use(function (req, res, next) {
 
   // Guardamos el error en res.locals (para que esté disponible esta petición)
   res.locals.error = "";
+
   if (error) res.locals.error = error;
 
   // Continuamos con la cadena
@@ -50,11 +62,12 @@ app.use('/login', loginRouter);
 // Función que comprueba si un usuario está logueado. Si no, le reenvía a login
 function restrict(req, res, next) {
   if (req.session.user) {
-    // Si el usuario está logueado, se continúa
+    // Si el usuario está logueado, se guarda su nombre de usuario y se continúa
+    res.locals.user = req.session.user.username;
     next();
   } else {
     // Si los usuarios no están logeados, se reenvían a login
-    res.session.error = "Unauthorized Access";
+    req.session.error = "Unauthorized Access";
     res.redirect('/login');
   }
 }
@@ -75,4 +88,4 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-module.exports = app;
+module.exports = { app, server };
