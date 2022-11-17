@@ -38,7 +38,7 @@
                             <input id="message-input" class="form-control" type="text" placeholder="Start typing...">
                         </div>
                         <div class="col-1">
-                            <button id="send-button" class="btn btn-primary" type="button">Send</button>
+                            <button id="send-button" class="btn btn-primary" type="submit">Send</button>
                         </div>
                     </div>
                 </form>
@@ -59,13 +59,13 @@
 
             // Si hay texto en el mensaje, se envía
             if (input.value) {
-                socket.emit("chat", {sender: "<%= user %>", message: input.value});
+                socket.emit("<%= chat %>", {sender: "<%= user %>", message: input.value});
                 input.value = "";
             }
         });
 
         // Al recibir un mensaje del servidor, se añade al chat
-        socket.on("chat", (msg) => {
+        socket.on("<%= chat %>", (msg) => {
             // Añadimos un div con el mensaje
             const div = document.createElement("div");
             div.classList.add("message");

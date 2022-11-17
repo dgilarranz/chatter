@@ -17,9 +17,9 @@ router.post('/', function(req, res, next) {
   if (users[username]){
     bcrypt.compare(password, users[username].hash, function(err, result) {
       if (result) {
-        // Si todo está correcto, creamos una sesión para el usuario y le redirigimos a chat
+        // Si todo está correcto, creamos una sesión para el usuario y le redirigimos a index
         req.session.user = users[username];
-        res.redirect('/chat');
+        res.redirect('/');
       }
       else {
         req.session.error = "Incorrect Username or Password";
