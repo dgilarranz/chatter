@@ -50,10 +50,11 @@
         form.setAttribute("action", "join-room");
       });
 
-      // Si se pulsa enter en "join-room-text", se manda a "join"
-      document.getElementById("join-room-text").addEventListener("submit", function(e) {
-        form.setAttribute("action", "join-room");
-        alert("JOIN");
+      // Evitamos que el enter cause un post -> forzamos a que se pulse el botón
+      document.getElementById("join-room-text").addEventListener("keydown", function(e) {
+        if(e.key == "Enter") {
+          e.preventDefault();
+        }
       });
     </script>
   </body>
